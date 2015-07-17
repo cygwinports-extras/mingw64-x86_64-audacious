@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-audacious"
-VERSION=3.4.3
+VERSION=3.6.2
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Audacious media player for Win64 toolchain"
@@ -13,9 +13,12 @@ of Beep Media Player (BMP), which itself forked from XMMS."
 HOMEPAGE="http://audacious-media-player.org/"
 SRC_URI="http://distfiles.audacious-media-player.org/audacious-${VERSION}.tar.bz2"
 SRC_DIR="audacious-${VERSION}"
-PATCH_URI="3.4.3-cross-compile.patch"
+PATCH_URI="3.6.2-cross-compile.patch"
 
 NO_AUTOPOINT=1
+# unistd.h:#define ftruncate ftruncate64 conflicts with
+# src/libaudcore/vfs.cc:VFSFile::ftruncate()
+CPPFLAGS+=" -D_FILE_OFFSET_BITS_SET_FTRUNCATE"
 
 src_compile() {
 	cd ${S}
